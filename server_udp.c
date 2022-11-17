@@ -26,20 +26,27 @@ int main(int argc, char** argv){
   struct UDP_Paquete paquete;
   int total_clientes = 0;
 
-  while(1){
-    printf("Esperando a que se conecten %d mataos mas\n",4-total_clientes);
+  while(total_clientes<4){
+    printf("Esperando a que se conecten %d mas\n",4-total_clientes);
     bytes = recvfrom(sock,(char*)&paquete,sizeof(paquete),0,(SOCKADDR*)&ip_c[total_clientes],&ip_size);
 
     if(bytes>0){
-      printf("Ha entrado uno con id %d\n",paquete.id);
+      printf("Ha entrado uno de tipo %d\n",paquete.id);
       if(paquete.id == PKT_Conn){
         printf("El paquete es de conection\n");
         total_clientes++;
         bytes = 0;
-        printf("Enviando id %d al cliente\n",total_clientes);
+        //printf("Enviando id %d al cliente\n",total_clientes);
+      
+        struct UDP_Paquete paq;
+        paq.id = total_clientes;
+        sendto(sock,(char*)&paq,sizeof(paq),0,(SOCKADDR*)&ip_c[total_clientes],&ip_size);
+        printf("error-> %d\n",WSAGetLastError());
         
-        int error = sendto(sock,total_clientes,sizeof(total_clientes),0,(SOCKADDR*)&ip_c[total_clientes],&ip_size);
-        printf("%d",error);
+        
+        //int error = sendto(sock,total_clientes,sizeof(total_clientes),0,(SOCKADDR*)&ip_c[total_clientes],&ip_size);
+        //printf("Errores-> %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n",WSAEINTR,WSAEINPROGRESS,WSAEFAULT,WSAENETRESET,WSAENOBUFS,WSAENOTCONN,WSAENOTSOCK,WSAEOPNOTSUPP,WSAESHUTDOWN,WSAEWOULDBLOCK,WSAEMSGSIZE,WSAEHOSTUNREACH);
+        //printf("%d\n",error);
       }
 
     }

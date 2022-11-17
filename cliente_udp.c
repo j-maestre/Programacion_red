@@ -27,11 +27,13 @@ int main(int argc, char** argv){
   int id;
   int id_tmp;
   int bytes = 0;
+  printf("Esperando id...\n");
   while(bytes<=0){
-
-    bytes = recvfrom(sock,id_tmp,sizeof(id_tmp),0,(SOCKADDR*)&ip,sizeof(ip));
+    struct UDP_Paquete newid;
+    recvfrom(sock,(char*)&newid,sizeof(newid),0,(SOCKADDR*)&ip,sizeof(ip));
+    //bytes = recvfrom(sock,id_tmp,sizeof(id_tmp),0,(SOCKADDR*)&ip,sizeof(ip));
     if(bytes>0){
-      id = id_tmp;
+      id = newid.id;
       printf("Id asignado-> %d\n",id);
     }
   }
