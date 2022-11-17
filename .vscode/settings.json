@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+      "stdio.h": "c",
+      "winsock.h": "c",
+      "structs.h": "c"
+    }
+}
